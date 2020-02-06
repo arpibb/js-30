@@ -1,1 +1,1 @@
-This is the 30 days of Javascript challange from Wes Bos.
+This is the 30 days of Javascript challange from Wes Bos. Updated readme.
