@@ -21,21 +21,16 @@ function playPuase(){
     playButton.innerHTML = '►'
   }
 }
-function setVolume(){
-  videoPlayer.volume = this.value
-}
-function setPlayBackRate(){
-  videoPlayer.playbackRate = this.value
+function handleRanges(){
+  videoPlayer[this.name] = this.value
 }
 function skipping(){
   videoPlayer.currentTime += parseInt(this.dataset.skip)
 }
 
-// console.log(parseInt(skippingButtons[0].dataset.skip))
-
 playButton.addEventListener('click',playPuase)
 videoPlayer.addEventListener('click',playPuase)
-volume.addEventListener('mousemove',setVolume)
-playBackRateSlider.addEventListener('mousemove',setPlayBackRate)
+volume.addEventListener('mousemove',handleRanges)
+playBackRateSlider.addEventListener('mousemove',handleRanges)
 skippingButtons.forEach(skippingButton => skippingButton.addEventListener('click',skipping))
 
