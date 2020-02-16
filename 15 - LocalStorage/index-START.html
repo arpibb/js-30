@@ -32,8 +32,15 @@
 
 <script>
   const addItems = document.querySelector('.add-items');
+  const textBox = document.querySelector('.add-items [name=item]')
   const itemsList = document.querySelector('.plates');
-  const items = JSON.parse(localStorage.getItem('items')) || [];
+  const checkAllButton = document.querySelector('#checkall')
+  const resetButton = document.querySelector('#reset')
+  let items = JSON.parse(localStorage.getItem('items')) || [];
+  if (!localStorage.getItem('checkedAll')){
+    checkAllButton.checked = localStorage.getItem('checkedAll')
+  }
+  
 
   function addItem(e){
     e.preventDefault() //prevents the reload of the page, when submitting a form for example, this is not going to, generally a form refreshes the page
@@ -45,8 +52,8 @@
     console.log(item)
     items.push(item)
     populateList(items,itemsList);
-    localStorage.setItem('items',JSON.stringify(items))
-    this.reset();
+    localStorage.setItem('items',JSON.stringify(items));
+    this.querySelector('[name=item]').value = ''
   }
 
   function populateList(plates =[], platesList){
@@ -67,13 +74,26 @@
     localStorage.setItem('items',JSON.stringify(items))
     populateList(items,itemsList);
   }
-  function checkAll(){
 
+  function checkAll(){
+    items.forEach(item => checkAllButton.checked ? item.done = true : item.done = false);
+    localStorage.setItem('items',JSON.stringify(items))
+    localStorage.setItem('checkedAll',`${items[0].done}`);
+    populateList(items,itemsList);
+  }
+
+  function resetAll(){
+    items = []
+    localStorage.setItem('items',JSON.stringify(items))
+    localStorage.setItem('checkedAll',false);
+    populateList(items,itemsList);
   }
 
   addItems.addEventListener('submit',addItem);
   populateList(items,itemsList);
   itemsList.addEventListener('click', toggleDone)
+  checkAllButton.addEventListener('click', checkAll)
+  resetButton.addEventListener('click',resetAll)
 
 
 
