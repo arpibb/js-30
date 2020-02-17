@@ -46,8 +46,32 @@
   <ul id="bands"></ul>
 
 <script>
+  const uList = document.querySelector('#bands')
 const bands = ['The Plot in You', 'The Devil Wears Prada', 'Pierce the Veil', 'Norma Jean', 'The Bled', 'Say Anything', 'The Midway State', 'We Came as Romans', 'Counterparts', 'Oh, Sleeper', 'A Skylit Drive', 'Anywhere But Here', 'An Old Dog'];
+const regex = new RegExp(/^the |^a |^an /,'i')
+function testBandName(band){
+  if(regex.test(band)){
+    const idx = band.indexOf(" ")
+    return idx + 1
+  }
+  else{
+    return 0
+  }
+}
+const matches = bands.sort((a,b) => {
+  if (a.substring([testBandName(a)]) > b.substring([testBandName(b)])){
+    return 1
+  }
+  else{
+    return -1
+  }
+})
 
+uList.innerHTML = matches.map(match => {
+  return (`<li>${match}</li>`)
+}).join("")
+
+// console.log(matches)
 
 </script>
 
