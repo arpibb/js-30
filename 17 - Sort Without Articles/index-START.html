@@ -58,20 +58,11 @@ function testBandName(band){
     return 0
   }
 }
-const matches = bands.sort((a,b) => {
-  if (a.substring([testBandName(a)]) > b.substring([testBandName(b)])){
-    return 1
-  }
-  else{
-    return -1
-  }
-})
+const sortedBands = bands.sort((a,b) => (a.substring([testBandName(a)]) > b.substring([testBandName(b)]) ? 1 : -1))
 
-uList.innerHTML = matches.map(match => {
-  return (`<li>${match}</li>`)
+uList.innerHTML = sortedBands.map(bands => {
+  return (`<li>${bands}</li>`)
 }).join("")
-
-// console.log(matches)
 
 </script>
 
