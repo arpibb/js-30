@@ -25,7 +25,11 @@ function paintToCanvas(){
 
   return setInterval(() => {
     ctx.drawImage(video,0,0,width,height)
-    const pixels = ctx.getImageDate(0,0,width,height);
+    let pixels = ctx.getImageData(0,0,width,height);
+    //pixels = redEffect(pixels);
+    //pixels = rgbSplit(pixels);
+    pixels = greenScreen(pixels);
+    ctx.putImageData(pixels,0,0)
   }, 16);
 }
 
@@ -40,6 +44,50 @@ function takePhoto(){
   strip.insertBefore(link,strip.firstChild);
 }
 
+function redEffect(pixels){
+  for(let i=0; i < pixels.data.length; i+=4){
+    pixels.data[i] += 100 ;
+    pixels.data[i + 1] += -50; 
+    pixels.data[i + 2] *= 0.5
+  }
+  return pixels
+}
+
+function rgbSplit(pixels){
+  for(let i=0; i < pixels.data.length; i+=4){
+    pixels.data[i - 150] = pixels.data[i + 0];
+    pixels.data[i + 100] = pixels.data[i + 1];
+    pixels.data[i - 150] = pixels.data[i + 2];
+  }
+  return pixels
+}
+
+function greenScreen(pixels){
+  const levels = {};
+
+  [...document.querySelectorAll('.rgb input')].forEach((input) =>{
+    levels[input.name] = input.value;
+  });
+
+  for(let i=0; i< pixels.data.length; i += 4){
+    //looping through all the pixels
+    red = pixels.data[i+0];
+    green = pixels.data[i+1];
+    blue = pixels.data[i+2];
+    alpha = pixels.data[i+4];
+
+    // taking out the pixels which are in between the ranges set by the sliders with the alpha
+    if(red >= levels.rmin 
+      && green >= levels.gmin
+      && blue >= levels.bmin
+      && red <= levels.rmax
+      && green <= levels.gmax
+      && blue <= levels.bmax) {
+        pixels.data[i + 3] =0;
+      }
+  }
+  return pixels
+}
 getVideo();
 
 video.addEventListener('canplay',paintToCanvas);
